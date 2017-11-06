@@ -1,10 +1,11 @@
-function [ distances paths ] = Dijkstra( closePlayers, holder, size, step, divisions )
+function [ distances paths ] = Dijkstra( closePlayers, repulsors, holder, size, step, divisions )
 %DIJKSTRA   Find the results from applying Dijkstra in the grid
 %   [ distances paths ] = Dijkstra( closePlayers, holder, size, step,
 %   divisions ) returns all the distances and paths to each closePlayers found by
 %   applying Dijkistra in the grid
-%TODO: OPTIMIZATIONS PLEASEEEEE
 
+
+%TODO: OPTIMIZATIONS PLEASEEEEE
 
 %Setting up vectors
 nodes = InitializeNodes(holder, size, step);    %Creating the vector containg the nodes
@@ -14,35 +15,41 @@ paths = zeros(length(closePlayers), length(nodes)); %Allocating the space fot th
 
 %Applying Dijkstra to each player in closePlayers
 for i = 1:length(closePlayers)
-    [distances(i) path] = FindPath(closePlayers(i, :), holder, nodes, step, divisions); %ISSO É BURRO. MUDAR ISSO.
+    [distances(i) path] = FindPath(closePlayers(i, :), repulsors, holder, nodes, step, divisions); %ISSO ï¿½ BURRO. MUDAR ISSO.
     paths(i, 1:length(path)) = path;
 end
 
 end
 
 
-%%Dijkstra
-function [targetDistance targetPath] = FindPath(start, target, nodes, step, divisions)
-%Setting up the Dijkistra 
+%%Dijkstra algorithm
+function [targetDistance targetPath] = FindPath(start, repulsors, target, nodes, step, divisions)
+
+%Setting up the Dijkstra 
 dist = Inf(length(nodes), 1);
 dist(:,2) = false;
 prev = zeros(length(nodes), 1);
 
 
-dist(Find2D(start, nodes)) = 0;         %Setting the initial distance to 0. Note that I use dist like a map
+dist(Find2D(start, nodes), 1) = 0;         %Setting the initial distance to 0. Note that dist is used like a map
 targetIndex = Find2D(target, nodes);
 
 while dist(targetIndex, 2) == false
     %Finding the node with minimum distance
     minDist = Inf;
+    currentNode = -1;
+    
     for i = 1:length(dist)
-        if dist(i) < minDist && dist(i, 2) == false
-            currentDistance = dist(i);
+        if dist(i,1) < minDist && dist(i, 2) == false
             currentNode = i;
-            minDist = dist(i);
+            minDist = dist(i,1);
         end
     end
-
+    
+    if currentNode == -1
+        
+    end
+    
     dist(currentNode, 2) = true;        %Mark as visited
     
     if nodes(currentNode)==target       %Check if it is the target (change to currentNode == targetIndex)
@@ -52,7 +59,7 @@ while dist(targetIndex, 2) == false
     %Calculate the distance for every neighbor
     neighbors = GetNeighbors(currentNode, nodes, step, divisions);
     for i = 1:length(neighbors)
-        distance = dist(currentNode) + Distance(nodes(currentNode, :), nodes(neighbors(i), :));
+        distance = dist(currentNode) + EdgeWeight(nodes(currentNode, :), nodes(neighbors(i), :), repulsors);
         if distance < dist(neighbors(i))
             dist(neighbors(i)) = distance;
             prev(neighbors(i)) = currentNode;

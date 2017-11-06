@@ -2,7 +2,7 @@ function index = Find2D(element, list)
 %FIND2D     Searches the nx2 matrix for a 1x2 element(ordered pair)
 %   index = Find2D(element, list) returns the index(the row) in which you
 %   can find element in list
-%TODO: Improve the script, as it is really ineficient atm
+%TODO: Improve the script, as it is really inefficient atm
 %TODO: Stop using find. Beware of equality with floats
 
 

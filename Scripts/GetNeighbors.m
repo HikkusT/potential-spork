@@ -3,8 +3,8 @@ function neighborsIndex = GetNeighbors(currentNode, nodes, step, divisions)
 %   neighborsIndex = GetNeighbors(currentNode, nodes, step, divisions)
 %   returns all the indexes of neighbors of the currentNode, given that the
 %   list of nodes is nodes, each separated by step
-%TODO: Script can easily be improved
 
+%TODO: Script can easily be improved
 
 node = nodes(currentNode, :);   %Getting the position of the currentNode
 
@@ -22,7 +22,7 @@ end
 neighbors = [];
 for i = 1:length(dirs)
     neighbor = [node(1) + dirs(i, 1), node(2) + dirs(i, 2)];
-    if (ismember(neighbor, nodes, 'rows'))    %Fácil de otimizar, usar infBound<value<supBound
+    if (ismember(neighbor, nodes, 'rows'))    %Fï¿½cil de otimizar, usar infBound<value<supBound
         neighbors = [neighbors; neighbor];
     end
 end

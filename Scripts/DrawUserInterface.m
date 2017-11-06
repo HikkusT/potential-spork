@@ -1,7 +1,6 @@
-function DrawUserInterface( paths, closePlayers, holder, size, step, divisions )
+function DrawUserInterface( paths, closePlayers, repulsors, holder, size, step, divisions )
 %DRAWUSERINTERFACE  Plots the data we found so that we can visualize the
 %results
-
 
 %Creating the vector containg the nodes
 nodes = InitializeNodes(holder, size, step);
@@ -30,7 +29,19 @@ for i = 1:length(closePlayers)
 end
 
 %Plotting players
-plot(closePlayers(:, 1), closePlayers(:, 2), 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 10);
+plot(closePlayers(:, 1), closePlayers(:, 2), 'ro', 'MarkerFaceColor', 'y', 'MarkerSize', 10);
+
+closeRepulsors = [];
+
+%Selecting opponents inside plot area
+for i = 1:length(repulsors)
+    if CheckIfIsClose( repulsors(i,:), holder, size)
+        closeRepulsors = [ closeRepulsors; repulsors(i,:) ];
+    end
+end
+
+%Plotting close opponents
+plot(closeRepulsors(:, 1), closeRepulsors(:, 2), 'rs', 'MarkerFaceColor', 'r', 'MarkerSize', 10);
 
 %Plotting holder
 plot(holder(:, 1), holder(:, 2), 'bx', 'MarkerFaceColor', 'b', 'MarkerSize', 10);

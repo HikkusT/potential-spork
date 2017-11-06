@@ -14,17 +14,17 @@ for i = -50:50;
 end
 
 %Initializing players
-playersFile = fopen('../Configs/Players.txt', 'r');
+playersFile = fopen('Configs/Players.txt', 'r');
 players = fscanf(playersFile, '%d %d', [2 Inf]);
 players = players';
 
 %Initializing holder
-holderFile = fopen('../Configs/Holder.txt', 'r');
+holderFile = fopen('Configs/Holder.txt', 'r');
 holder = fscanf(holderFile, '%d %d', [2 Inf]);
 holder = holder';
 
 %Initializing points of repulsion
-repulsoresFile = fopen('../Configs/Repulsores.txt', 'r');
+repulsoresFile = fopen('Configs/Repulsores.txt', 'r');
 repulsores = fscanf(repulsoresFile, '%d %d', [2 Inf]);
 repulsores = repulsores';
 
@@ -44,7 +44,7 @@ for i = 1:length(players)
 end
 %
 
-%% First Debug (Bem inútil agora, ignorar. Depois eu devo tirar do código)
+%% First Debug (Bem inï¿½til agora, ignorar. Depois eu devo tirar do cï¿½digo)
 % %Visual Debug
 % figure;
 % hold on;
@@ -102,14 +102,3 @@ ylim([-34 34]);
 pbaspect([1.6 1 1])
 %
 end
-
-%% Auxiliary functions
-
-%Check if the player is in the search area
-function isClose = CheckIfIsClose(player, holder, size)
-isClose = false;
-if ((player(1)< (holder(1) + size/2) && player(1)> (holder(1)-size/2))&&(player(2)< (holder(2) + size/2) && player(2)> (holder(2)-size/2)))
-    isClose = true;
-end
-end
-%
