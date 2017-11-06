@@ -14,17 +14,17 @@ for i = -50:50;
 end
 
 %Initializing players
-playersFile = fopen('Configs/Players.txt', 'r');
+playersFile = fopen('../Configs/Players.txt', 'r');
 players = fscanf(playersFile, '%d %d', [2 Inf]);
 players = players';
 
 %Initializing holder
-holderFile = fopen('Configs/Holder.txt', 'r');
+holderFile = fopen('../Configs/Holder.txt', 'r');
 holder = fscanf(holderFile, '%d %d', [2 Inf]);
 holder = holder';
 
 %Initializing points of repulsion
-repulsoresFile = fopen('Configs/Repulsores.txt', 'r');
+repulsoresFile = fopen('../Configs/Repulsores.txt', 'r');
 repulsores = fscanf(repulsoresFile, '%d %d', [2 Inf]);
 repulsores = repulsores';
 
