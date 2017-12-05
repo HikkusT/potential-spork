@@ -78,7 +78,7 @@ plot([0 0], [54.5 -54.5], 'w', 'linewidth', 3);
 plot(players(:, 1), players(:, 2), 'yo', 'MarkerFaceColor', 'y', 'MarkerSize', 10);
 
 %Plotting holder
-plot(holder(:, 1), holder(:, 2), 'bx', 'MarkerFaceColor', 'b', 'MarkerSize', 10);
+plot(holder(:, 1), holder(:, 2), 'bo', 'MarkerFaceColor', 'b', 'MarkerSize', 10);
 
 %Plotting points of repulsion
 plot(repulsores(:, 1), repulsores(:, 2), 'rs', 'MarkerFaceColor', 'r', 'MarkerSize', 10);

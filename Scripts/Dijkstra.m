@@ -5,73 +5,81 @@ function [ distances paths ] = Dijkstra( closePlayers, repulsors, holder, size, 
 %   applying Dijkistra in the grid
 
 
-%TODO: OPTIMIZATIONS PLEASEEEEE
-
 %Setting up vectors
-nodes = InitializeNodes(holder, size, step);    %Creating the vector containg the nodes
-distances = [];                                 %Vector that will return the distances
-paths = [];                                     %Vector that will return the paths
-paths = zeros(length(closePlayers), length(nodes)); %Allocating the space fot the paths vector
+[nodes, holderPos] = InitializeNodes(holder, size, step);    % Creating the vector containg the nodes
+magnetizedMates = MagnetizePlayers( closePlayers, nodes);      % Assigning close Players to graph nodes
 
-%Applying Dijkstra to each player in closePlayers
-for i = 1:length(closePlayers)
-    [distances(i) path] = FindPath(closePlayers(i, :), repulsors, holder, nodes, step, divisions); %ISSO � BURRO. MUDAR ISSO.
-    paths(i, 1:length(path)) = path;
-end
+
+%Applying Dijkstra starting from holder
+[distances paths] = FindPaths(holderPos, repulsors, magnetizedMates, nodes, step, divisions);
 
 end
 
 
 %%Dijkstra algorithm
-function [targetDistance targetPath] = FindPath(start, repulsors, target, nodes, step, divisions)
+function [distances paths] = FindPaths(start, repulsors, targets, nodes, step, divisions)
 
-%Setting up the Dijkstra 
-dist = Inf(length(nodes), 1);
-dist(:,2) = false;
-prev = zeros(length(nodes), 1);
+    %Setting up the Dijkstra 
+    dist = Inf(length(nodes), 1);
+    dist(:,2) = false;
+    prev = zeros(length(nodes), 1);
 
+    dist(start,1) = 0;                  %Setting the initial distance to itself as 0. Note that dist is used like a map
+    targetIndex = start;
+    targetsComputed = 0;
 
-dist(Find2D(start, nodes), 1) = 0;         %Setting the initial distance to 0. Note that dist is used like a map
-targetIndex = Find2D(target, nodes);
+    while true
+        %Finding the node with minimum distance
+        minDist = Inf;
+        currentNode = -1;
 
-while dist(targetIndex, 2) == false
-    %Finding the node with minimum distance
-    minDist = Inf;
-    currentNode = -1;
-    
-    for i = 1:length(dist)
-        if dist(i,1) < minDist && dist(i, 2) == false
-            currentNode = i;
-            minDist = dist(i,1);
+        for i = 1:size(dist,1)
+            if dist(i,1) < minDist && dist(i, 2) == false
+                currentNode = i;
+                minDist = dist(i,1);
+            end
         end
-    end
-    
-    if currentNode == -1
         
-    end
-    
-    dist(currentNode, 2) = true;        %Mark as visited
-    
-    if nodes(currentNode)==target       %Check if it is the target (change to currentNode == targetIndex)
-        break
-    end
-    
-    %Calculate the distance for every neighbor
-    neighbors = GetNeighbors(currentNode, nodes, step, divisions);
-    for i = 1:length(neighbors)
-        distance = dist(currentNode) + EdgeWeight(nodes(currentNode, :), nodes(neighbors(i), :), repulsors);
-        if distance < dist(neighbors(i))
-            dist(neighbors(i)) = distance;
-            prev(neighbors(i)) = currentNode;
+        if currentNode == -1
+            break;
+        end
+        
+        dist(currentNode, 2) = true;        %Mark as visited
+
+        for i = 1:length(targets)
+            if currentNode == targets(i)
+                targetsComputed = targetsComputed+1;
+                break;
+            end
+        end
+
+        if targetsComputed == length(targets)
+            break;
+        end
+
+        %Calculate the distance for every neighboor
+        neighboors = GetNeighbors(currentNode, nodes, step, divisions);
+        for i = 1:length(neighboors)
+            distance = dist(currentNode) + EdgeWeight(nodes(currentNode, :), nodes(neighboors(i), :), repulsors);
+            if distance < dist(neighboors(i))
+                dist(neighboors(i)) = distance;
+                prev(neighboors(i)) = currentNode;
+            end
         end
     end
-end
 
-%Setting what the distance and path that the function returns
-targetDistance = dist(targetIndex);
-targetPath = [targetIndex];
-while targetPath(length(targetPath)) ~= 0
-    targetPath = [targetPath prev(targetPath(length(targetPath)))];
-end
+    %Setting what the distance and path that the function returns
+    distances = [];
+    paths = {};
+    for i = 1:length(targets)
+        distances(i) = dist(targets(i),1);
+        
+        paths{i} = [targets(i)];
+        it = length(paths{i});
+        while paths{i}(it) ~= 0
+            paths{i} = [ paths{i}, prev(paths{i}(it)) ];
+            it = length(paths{i});
+        end
+    end
 
 end

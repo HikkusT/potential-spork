@@ -8,11 +8,19 @@ function answer = EdgeWeight( vert1, vert2, repulsors )
 
 % Trapezoidal rule
 
-y1 = 1 + CostFunc(vert1, repulsors, 1, 1);
-y2 = 1 + CostFunc(vert2, repulsors, 1, 1);
+% Simple repultion
+%y1 = 1 + CostFunc(vert1, repulsors, 1, 1);
+%y2 = 1 + CostFunc(vert2, repulsors, 1, 1);
 
+% Strong repulsion
+y1 = 1 + CostFunc(vert1, repulsors, 1, 1000);
+y2 = 1 + CostFunc(vert2, repulsors, 1, 1000);
+
+% Distance with repulsive potential influence
 answer = (y1 + y2)*EuclidDist(vert1, vert2)/2;
 
+% Classic euclidean distance
+%answer = hypot(vert1(1)-vert2(1), vert1(2)-vert2(2));
 
 end
 

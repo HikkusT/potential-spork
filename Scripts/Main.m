@@ -2,7 +2,7 @@ function Main
 
 %% Variables
 size = 30;
-step = 0.5;
+step = 0.25;
 divisions = 1;      %Ignorar isso por enquanto. Seria o equivalente ao m.
 
 %% Initializing
@@ -15,6 +15,6 @@ disp('Fazendo o dijkstra...')
 
 %% Visualizing the results
 disp('Printando os resultados...')
-DrawUserInterface(playersPaths, closePlayers, repulsors, holder, size, step, divisions); %Uses the data output from the dijkistra to plot an interface
+DrawUserInterface(playersPaths, playersDistances, closePlayers, repulsors, holder, size, step, divisions); %Uses the data output from the dijkistra to plot an interface
 end
 
